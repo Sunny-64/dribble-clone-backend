@@ -1,6 +1,6 @@
 const mongoose = require('mongoose'); 
 
-const userSchema = new mongoose.Schema({
+const schema = new mongoose.Schema({
     name : {
         type : String, 
         required : true, 
@@ -14,14 +14,19 @@ const userSchema = new mongoose.Schema({
         required : true, 
         unique : true, 
     }, 
+    password : {
+        type : String, 
+        requried : true,
+    },
     avatar : {
         type : String, 
+        default : ''
     }, 
-
     location : {
         type : String, 
+        default : ''
     }, 
-    purpose : [
+    purposes : [
         {
             title : String, 
         }
@@ -32,4 +37,17 @@ const userSchema = new mongoose.Schema({
     }, 
 }, {timestamps : true}); 
 
-module.exports = new mongoose.Model("User", userSchema); 
+schema.post('save', function(err, doc, next) {
+    if(err?.name === 'MongoServerError' && err?.code === 11000 && err?.errorResponse?.keyPattern?.username === 1){
+        next(new Error('Username is already taken.'));
+    }
+    if(err?.name === 'MongoServerError' && err?.code === 11000 && err?.errorResponse?.keyPattern?.email === 1){
+        next(new Error('Email is already registered.'));
+    }
+    else{
+        console.log('schema . post executed but in the else condition....\n')
+        next()
+    }
+});
+
+module.exports = new mongoose.model("User", schema); 

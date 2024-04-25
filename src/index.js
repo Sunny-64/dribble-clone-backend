@@ -27,6 +27,15 @@ app.get("/", (req, res) => {
     res.status(200).json({message : "Welcome to dribble clone backend"}); 
 })
 
+// Auth routes...
+const authRoutes = require('./routes/auth'); 
+app.use('/auth', authRoutes); 
+
+// User routes...
+const userRoutes = require('./routes/user'); 
+app.use('/user', userRoutes); 
+
+// Invalid routes...
 app.get("*", (req, res) => {
     res.status(404).json({message : 'not-found'}); 
 })
