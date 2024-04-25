@@ -72,7 +72,6 @@ const updateUserDetails = async (req, res) => {
   	}
 };
 
-
 module.exports = {
 	getUser,
 	updateUserDetails,

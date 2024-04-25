@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 
 const { sendMail } = require('../services/email');
 const User = require('./../models/user'); 
-const user = require('./../models/user');
 
 async function signUp (req, res) {
     const {name, username, email, password} = req.body; 
@@ -17,8 +16,9 @@ async function signUp (req, res) {
         const user = await newUser.save(); 
         delete user.password; 
 
-        await sendMail(email); 
-        const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, {expiresIn : 60 * 60}); 
+        const token = jwt.sign({userId : user._id}, process.env.JWT_SECRET, {expiresIn : 60 * 60}); 
+
+        await sendMail(email, "email-confirmation", token); 
 
         return res.status(200).json({
             success : 'ok', 
@@ -36,22 +36,22 @@ async function signUp (req, res) {
 }
 
 const verifyEmail = async (req, res) => {
-    const {token} = req.query.token; 
-    console.log(token); 
+    const token = req.query.token; 
     let userId; 
     jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
         if (err) {
             console.log(err); 
-            return res.status(401).json({success : 'failed', message : 'Unauthorized'})
+            throw new Error('Unauthorized'); 
         }
-        userId = decoded.user_id;
+        userId = decoded?.userId;
     });
 
     try{
-        const user = await User.findbyId(userId); 
+        const user = await User.findById(userId); 
         user.isEmailVerified = true; 
         await user.save(); 
-        return res.send('<h1> Email confirmed </h1>'); 
+        await sendMail(user.email, 'thank-you'); 
+        return res.send('<h1> Email confirmed. </h1>'); 
     }
     catch(err){
         console.log(err.message)

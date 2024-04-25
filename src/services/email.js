@@ -10,9 +10,8 @@ const transporter = nodemailer.createTransport({
 
 async function sendMail(reciever, emailType, token) {
   try {
-    let info = "";
     if (emailType === "thank-you") {
-      info = await transporter.sendMail({
+      await transporter.sendMail({
         from: process.env.GMAIL,
         to: reciever,
         subject: "Thank you ♥",
@@ -20,11 +19,11 @@ async function sendMail(reciever, emailType, token) {
       });
     }
     if (emailType === "email-confirmation") {
-      info = await transporter.sendMail({
+      await transporter.sendMail({
         from: process.env.GMAIL,
         to: reciever,
         subject: "Email confirmation",
-        html: `<strong>To Confirm your email click <a href='http://localhost:3000/verify-email?token=${token}' >here</a> </strong>`,
+        html: `<strong>To Confirm your email click <a href='http://localhost:3000/auth/verify-email?token=${token}' >here</a> </strong>`,
       });
     }
   } catch (err) {
