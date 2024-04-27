@@ -16,7 +16,6 @@ const getUser = async (req, res) => {
 		})
 	}
 	catch(err) {
-		console.log(err); 
 		res.status(500).json({
 			success : 'failed', 
 			message : 'Internal Server error'
@@ -64,7 +63,6 @@ const updateUserDetails = async (req, res) => {
 		})
 
   	} catch (err) {
-		console.log(err);
 		return res.status(500).json({
 			success: "failed",
 			message: "Internal Server Error",

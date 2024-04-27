@@ -46,7 +46,6 @@ schema.post('save', function(err, doc, next) {
         next(new Error('Email is already registered.'));
     }
     else{
-        console.log('schema . post executed but in the else condition....\n')
         next()
     }
 });

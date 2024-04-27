@@ -27,7 +27,6 @@ async function signUp (req, res) {
         })
     }
     catch(err) {
-        console.log(err.message)
         return res.status(500).json({
             success : 'failed',
             message : err?.message ?? 'Internal Server error',
@@ -40,7 +39,6 @@ const verifyEmail = async (req, res) => {
     let userId; 
     jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
         if (err) {
-            console.log(err); 
             throw new Error('Unauthorized'); 
         }
         userId = decoded?.userId;
@@ -54,7 +52,6 @@ const verifyEmail = async (req, res) => {
         return res.send('<h1> Email confirmed. </h1>'); 
     }
     catch(err){
-        console.log(err.message)
         return res.status(500).json({
             success : 'failed',
             message : err?.message ?? 'Internal Server error',
