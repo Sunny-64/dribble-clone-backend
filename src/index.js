@@ -6,11 +6,12 @@ const cors = require("cors");
 const morgan = require("morgan")
 
 // custom imports 
-const connectDb = require('./config/db'); 
+const initiateServer = require('./config/db'); 
 
 
 const app = express(); 
-const PORT = process.env.PORT; 
+const router = express.Router(); 
+initiateServer(app); 
 
 // Connect Database.
 connectDb(); 
@@ -22,6 +23,9 @@ app.use(cors({
 app.use(morgan('dev')); 
 app.use(express.json()); 
 app.use(express.urlencoded({extended : true})); 
+
+
+app.use("/.netlify/functions/app", router);
 
 app.get("/", (req, res) => {
     res.status(200).json({message : "Welcome to dribble clone backend"}); 
@@ -40,6 +44,6 @@ app.get("*", (req, res) => {
     res.status(404).json({message : 'not-found'}); 
 })
 
-app.listen(PORT, () => {
-    console.log(`SERVER RUNNING AT PORT : ${PORT}`)
-})
+module.exports = {
+    app,
+}

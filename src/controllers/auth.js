@@ -16,7 +16,7 @@ async function signUp (req, res) {
         const user = await newUser.save(); 
         delete user.password; 
 
-        const token = jwt.sign({userId : user._id}, process.env.JWT_SECRET, {expiresIn : 60 * 60}); 
+        const token = jwt.sign({userId : user._id}, process.env.JWT_SECRET, {expiresIn : '24h'}); 
 
         await sendMail(email, "email-confirmation", token); 
 
@@ -59,7 +59,38 @@ const verifyEmail = async (req, res) => {
     }
 }
 
+const resendEmailVerificationMail = async (req, res) => {
+    const token = req.body.token; 
+    if(!token || !req.user){
+        return res.status(401).json({
+            success : 'failed', 
+            message : 'unauthorized',
+        })
+    }
+    try{
+        const user = await User.findById(req.user.userId); 
+        if(!user){
+            return res.satus(404).json({
+                success : 'failed', 
+                message : 'user not found',
+            }); 
+        }
+        await sendMail(user?.email, "email-confirmation", token); 
+        return res.status(200).json({
+            success : 'ok', 
+            message : 'Email sent.'
+        })
+    }
+    catch(err){
+        return res.status(500).json({
+            success : 'failed',
+            message : err?.message ?? 'Internal Server error',
+        }) 
+    }
+}
+
 module.exports = {
     signUp, 
     verifyEmail,
+    resendEmailVerificationMail,
 }

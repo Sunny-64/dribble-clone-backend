@@ -25,7 +25,7 @@ const getUser = async (req, res) => {
 
 const updateUserDetails = async (req, res) => {
 	const { purposes, location } = req.body;
-	const userId = req.user._id;
+	const userId = req.user.userId;
 
   // check if inputs are provided
   	if (!(purposes || location)) {
