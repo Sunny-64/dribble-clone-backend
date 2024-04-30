@@ -39,7 +39,7 @@ const verifyEmail = async (req, res) => {
     let userId; 
     jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
         if (err) {
-            throw new Error('Unauthorized'); 
+            throw new Error('Unauthorized token'); 
         }
         userId = decoded?.userId;
     });
@@ -49,7 +49,7 @@ const verifyEmail = async (req, res) => {
         user.isEmailVerified = true; 
         await user.save(); 
         await sendMail(user.email, 'thank-you'); 
-        return res.send('<h1> Email confirmed. </h1>'); 
+        return res.status(200).redirect('http://localhost:3001/'); 
     }
     catch(err){
         return res.status(500).json({
@@ -60,7 +60,8 @@ const verifyEmail = async (req, res) => {
 }
 
 const resendEmailVerificationMail = async (req, res) => {
-    const token = req.body.token; 
+    const token = req.body.token;
+
     if(!token || !req.user){
         return res.status(401).json({
             success : 'failed', 
@@ -70,7 +71,7 @@ const resendEmailVerificationMail = async (req, res) => {
     try{
         const user = await User.findById(req.user.userId); 
         if(!user){
-            return res.satus(404).json({
+            return res.status(404).json({
                 success : 'failed', 
                 message : 'user not found',
             }); 

@@ -2,7 +2,7 @@ const User = require("./../models/user");
 
 const getUser = async (req, res) => {
 	try{
-		const user = await User.findById(req.user._id); 
+		const user = await User.findById(req.user.userId); 
 		if(!user) {
 			return res.status(404).json({
 				success : 'failed',
@@ -18,7 +18,7 @@ const getUser = async (req, res) => {
 	catch(err) {
 		res.status(500).json({
 			success : 'failed', 
-			message : 'Internal Server error'
+			message : err?.message ?? 'Internal Server error'
 		})
 	}
 }
@@ -50,7 +50,8 @@ const updateUserDetails = async (req, res) => {
 			
 		}
 		if(purposes) {
-			user.purpose = [...user.purposes, ...purposes];  
+			const convertToArray = JSON.parse(purposes);
+			user.purposes = convertToArray;  
 		}
 		if(location) {
 			user.location = location; 
@@ -63,9 +64,10 @@ const updateUserDetails = async (req, res) => {
 		})
 
   	} catch (err) {
+		console.log(err);
 		return res.status(500).json({
 			success: "failed",
-			message: "Internal Server Error",
+			message: err?.message ?? 'Internal Server error',
 		});
   	}
 };

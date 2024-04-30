@@ -29,7 +29,10 @@ const schema = new mongoose.Schema({
     }, 
     purposes : [
         {
-            title : String, 
+            id : Number, 
+            img : String, 
+            isSelected : Boolean,
+            purpose : String, 
         }
     ],
     isEmailVerified : {

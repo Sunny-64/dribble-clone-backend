@@ -8,14 +8,13 @@ const verifiedEmailRequired = async (req, res, next) => {
                 message : 'user not found'
             }); 
         }
-        if(!req.user.isEmailVerified){
+        if(!user.isEmailVerified){
             return res.status(401).json({
                 success : 'failed', 
                 message : 'Please Verify the email'
             })
         }
         next(); 
-
     }
     catch(err){
         return res.status(500).json({
