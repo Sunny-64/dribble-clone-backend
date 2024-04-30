@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt'); 
 
 const { sendMail } = require('../services/email');
 const User = require('./../models/user'); 
@@ -6,7 +7,7 @@ const User = require('./../models/user');
 async function signUp (req, res) {
     const {name, username, email, password} = req.body; 
     try {
-        const newUser = new User({name, username, email, password}); 
+        const newUser = new User({name, username, email, password : bcrypt.hashSync(password, 10)}); 
         if(!(name && username && email && password)) {
             return res.status(400).json({
                 success : 'failed', 
