@@ -49,7 +49,7 @@ const verifyEmail = async (req, res) => {
         user.isEmailVerified = true; 
         await user.save(); 
         await sendMail(user.email, 'thank-you'); 
-        return res.status(200).redirect('http://localhost:3001/'); 
+        return res.status(200).redirect('https://dribble-clone-gamma.vercel.app/'); 
     }
     catch(err){
         return res.status(500).json({
