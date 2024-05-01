@@ -21,7 +21,7 @@ app.use(
 app.use((req, res, next) => {
     console.log('req headers in app.use : ',req.headers); 
 
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", "https://dribble-clone-gamma.vercel.app");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
     next();
@@ -33,7 +33,7 @@ app.use(express.urlencoded({ extended: true }));
 
 router.use((req, res, next) => {
     console.log('req headers in router.use : ',req.headers); 
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", "https://dribble-clone-gamma.vercel.app");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
     next();
