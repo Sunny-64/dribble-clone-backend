@@ -13,19 +13,22 @@ const app = express();
 const router = express.Router(); 
 initiateServer(app); 
 
-let corsOptions = {
-    origin: "*",
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
-app.use(cors(corsOptions)); 
-router.use(cors(corsOptions))
-
+app.use(cors({
+    origin : '*',
+}))
 app.use(morgan('dev')); 
 app.use(express.json()); 
 app.use(express.urlencoded({extended : true})); 
 
 
 app.use("/.netlify/functions/app", router);
+
+router.options('*', cors()); // Enable preflight for all routes
+router.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
 
 router.get("/", (req, res) => {
     res.status(200).json({message : "Welcome to dribble clone backend"}); 
