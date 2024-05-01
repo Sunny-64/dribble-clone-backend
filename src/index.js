@@ -12,15 +12,14 @@ const app = express();
 const router = express.Router();
 initiateServer(app);
 
-app.use(
-    cors({
-        origin: "*",
-    })
-);
+const corsOptions = {
+    origin : 'https://dribble-clone-gamma.vercel.app', 
+    optionSuccessStatus : 200, 
+}
+app.use(cors(corsOptions));
+router.use(cors(corsOptions));
 
 app.use((req, res, next) => {
-    console.log('req headers in app.use : ',req.headers); 
-
     res.header("Access-Control-Allow-Origin", "https://dribble-clone-gamma.vercel.app");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
@@ -32,7 +31,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 router.use((req, res, next) => {
-    console.log('req headers in router.use : ',req.headers); 
     res.header("Access-Control-Allow-Origin", "https://dribble-clone-gamma.vercel.app");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");

@@ -7,7 +7,8 @@ const User = require('./../models/user');
 async function signUp (req, res) {
     const {name, username, email, password} = req.body; 
     try {
-        const newUser = new User({name, username, email, password : bcrypt.hashSync(password, 10)}); 
+        const hashedPassword = bcrypt.hashSync(password, 10); 
+        const newUser = new User({name, username, email, password : hashedPassword}); 
         if(!(name && username && email && password)) {
             return res.status(400).json({
                 success : 'failed', 
