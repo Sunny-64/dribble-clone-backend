@@ -19,9 +19,11 @@ app.use(
 );
 
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "https://dribble-clone-gamma.vercel.app/");
+    console.log('req headers in app.use : ',req.headers); 
+
+    res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    res.header("Access-Control-Allow-Headers", "Content-Type");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
     next();
 });
 
@@ -29,17 +31,16 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+router.use((req, res, next) => {
+    console.log('req headers in router.use : ',req.headers); 
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    next();
+});
+
 app.use("/.netlify/functions/app", router);
 
-// router.options("*", cors()); // Enable preflight for all routes
-// router.use((req, res, next) => {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header(
-//         "Access-Control-Allow-Headers",
-//         "Origin, X-Requested-With, Content-Type, Accept"
-//     );
-//     next();
-// });
 
 router.get("/", (req, res) => {
     res.status(200).json({ message: "Welcome to dribble clone backend" });
