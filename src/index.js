@@ -13,9 +13,12 @@ const app = express();
 const router = express.Router(); 
 initiateServer(app); 
 
-app.use(cors({
-    origin : '*'
-})); 
+let corsOptions = {
+    origin: "*",
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+app.use(cors(corsOptions)); 
+router.use(cors(corsOptions))
 
 app.use(morgan('dev')); 
 app.use(express.json()); 
