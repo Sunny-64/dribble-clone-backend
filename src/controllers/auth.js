@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 
 const { sendMail } = require('../services/email');
 const User = require('./../models/user'); 
+const { emitSocketEvent } = require('../sockets');
 
 async function signUp (req, res) {
     const {name, username, email, password} = req.body; 
@@ -51,7 +52,8 @@ const verifyEmail = async (req, res) => {
         user.isEmailVerified = true; 
         await user.save(); 
         await sendMail(user.email, 'thank-you'); 
-        return res.status(200).redirect('https://dribble-clone-gamma.vercel.app/'); 
+        emitSocketEvent(req, user._id, 'email-verified', 'email-verified');
+        return res.status(200).send('email is verified'); 
     }
     catch(err){
         return res.status(500).json({

@@ -23,7 +23,7 @@ async function sendMail(reciever, emailType, token) {
         from: process.env.GMAIL,
         to: reciever,
         subject: "Email confirmation",
-        html: `<strong>To Confirm your email click <a href='https://dribble-clone-backend.netlify.app/.netlify/functions/app/auth/verify-email?token=${token}' >here</a> </strong>`,
+        html: `<strong>To Confirm your email click <a href='https://dribble-clone-gamma.vercel.app/auth/verify-email?token=${token}' >here</a> </strong>`,
       });
     }
   } catch (err) {
