@@ -2,8 +2,7 @@
   "name": "backend",
   "scripts": {
     "start": "node ./src/index",
-    "dev": "nodemon ./src/index",
-    "build": "netlify deploy --prod"
+    "dev": "nodemon ./src/index"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
