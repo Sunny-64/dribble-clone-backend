@@ -30,7 +30,7 @@ initializeSocket(io);
 initiateServer(httpServer);
 
 const corsOptions = {
-    origin : '*', 
+    origin : 'https://dribble-clone-gamma.vercel.app', 
     optionSuccessStatus : 200, 
 }
 
